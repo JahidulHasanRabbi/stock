@@ -1,0 +1,99 @@
+<!-- stocks/templates/stocks/stock_list.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock List</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+
+<body>
+    <h1>Stock List</h1>
+
+    <table border="1" id="stockTable">
+        <thead>
+            <tr>
+                <th>Trade Code</th>
+                <th>Date</th>
+                <th>Close</th>
+                <th>Volume</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stock in stocks %}
+            <tr id="row_{{ stock.id }}">
+                <td id="trade_code_{{ stock.id }}">{{ stock.trade_code }}</td>
+                <td id="date_{{ stock.id }}">{{ stock.date }}</td>
+                <td id="close_{{ stock.id }}">{{ stock.close }}</td>
+                <td id="volume_{{ stock.id }}">{{ stock.volume }}</td>
+                <td>
+                    <button onclick="editRow({{ stock.id }})">Edit</button>
+                    <button onclick="updateRow({{ stock.id }})" style="display:none;">Update</button>
+                    <button onclick="cancelEdit({{ stock.id }})" style="display:none;">Cancel</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        function editRow(stockId) {
+            $('#row_' + stockId + ' td:not(:last-child)').each(function() {
+                var currentText = $(this).text();
+                var inputField = '<input type="text" value="' + currentText + '" />';
+                $(this).html(inputField);
+            });
+
+            $('#row_' + stockId + ' button').hide();
+            $('#row_' + stockId + ' button:eq(1)').show(); // Show Update button
+            $('#row_' + stockId + ' button:eq(2)').show(); // Show Cancel button
+        }
+
+        function updateRow(stockId) {
+            var updatedData = {
+                'trade_code': $('#trade_code_' + stockId + ' input').val(),
+                'date': $('#date_' + stockId + ' input').val(),
+                'close': $('#close_' + stockId + ' input').val(),
+                'volume': $('#volume_' + stockId + ' input').val(),
+            };
+
+            // Perform AJAX request to update the data on the server
+            $.ajax({
+                type: 'POST',
+                url: '/update_stock/' + stockId + '/',
+                data: updatedData,
+                success: function(response) {
+                    // Update the row with the new data
+                    $('#row_' + stockId + ' td:not(:last-child)').each(function(key) {
+                        $(this).html(response[key]);
+                    });
+
+                    // Hide the input fields and show the buttons again
+                    $('#row_' + stockId + ' td input').hide();
+                    $('#row_' + stockId + ' button').show();
+                },
+                error: function(error) {
+                    console.log('Error updating stock:', error);
+                }
+            });
+        }
+
+        function cancelEdit(stockId) {
+            // Restore original data and hide input fields
+            $('#row_' + stockId + ' td:not(:last-child)').each(function() {
+                $(this).html($(this).children('input').val());
+            });
+
+            // Hide the input fields and show the buttons again
+            $('#row_' + stockId + ' td input').hide();
+            $('#row_' + stockId + ' button').show();
+        }
+    </script>
+</body>
+
+</html>
