@@ -16,8 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from server.views import StockJSONView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', )
+    path('', StockJSONView.as_view()),
 ]
