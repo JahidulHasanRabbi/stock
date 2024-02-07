@@ -6,61 +6,59 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock List</title>
-    <style>
-        /* Your existing styles here */
-    </style>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+    
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+    
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+    
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+    
+        th {
+            background-color: #f2f2f2;
+        }
+    
+        tr:nth-child(even) {
+            background-color: #f9f9f9; /* Off-white color for even rows */
+        }
+    
+        tr:nth-child(odd) {
+            background-color: #ffffff; /* White color for odd rows */
+        }
+    
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    
+        button {
+            cursor: pointer;
+            padding: 8px;
+            margin: 4px;
+        }
+    
+        #searchBox {
+            margin-bottom: 10px;
+            margin-left: 10px;
+            padding: 8px;
+        }
+    </style>
 </head>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-    }
 
-    h1 {
-        text-align: center;
-        color: #333;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-
-    th, td {
-        padding: 12px;
-        text-align: left;
-        border: 1px solid #ddd;
-    }
-
-    th {
-        background-color: #f2f2f2;
-    }
-
-    tr:nth-child(even) {
-        background-color: #f9f9f9; 
-    }
-
-    tr:nth-child(odd) {
-        background-color: #ffffff; 
-    }
-
-    tr:hover {
-        background-color: #f5f5f5;
-    }
-
-    button {
-        cursor: pointer;
-        padding: 8px;
-        margin: 4px;
-    }
-
-    #searchBox {
-        margin-bottom: 10px;
-        margin-left: 10px;
-        padding: 8px;
-    }
-</style>
 
 <body>
     <h1>Stock List</h1>
@@ -75,6 +73,7 @@
                 <th>Date</th>
                 <th>Close</th>
                 <th>Volume</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -85,6 +84,11 @@
                 <td id="date_{{ forloop.counter }}">{{ stock.date }}</td>
                 <td id="close_{{ forloop.counter }}">{{ stock.close }}</td>
                 <td id="volume_{{ forloop.counter }}">{{ stock.volume }}</td>
+                <td>
+                    <button onclick="editRow({{ forloop.counter }})">Edit</button>
+                    <button onclick="updateRow({{ forloop.counter }})" style="display:none;">Update</button>
+                    <button onclick="cancelEdit({{ forloop.counter }})" style="display:none;">Cancel</button>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
