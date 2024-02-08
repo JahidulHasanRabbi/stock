@@ -16,9 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from server.views import StockJSONView
+from server.views import StockJSONView, StockCSVView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', StockJSONView.as_view()),
+    path('sql/', StockCSVView.as_view()),
 ]

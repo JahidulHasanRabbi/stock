@@ -11,54 +11,64 @@
         body {
             font-family: Arial, sans-serif;
         }
-    
+
         h1 {
             text-align: center;
             color: #333;
         }
-    
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-    
+
         th, td {
             padding: 12px;
             text-align: left;
             border: 1px solid #ddd;
         }
-    
+
         th {
             background-color: #f2f2f2;
         }
-    
-        tr:nth-child(even) {
-            background-color: #f9f9f9; /* Off-white color for even rows */
+
+        tr.odd {
+            background-color: #f9f9f9;
         }
-    
-        tr:nth-child(odd) {
-            background-color: #ffffff; /* White color for odd rows */
+
+        tr.even {
+            background-color: #ffffff;
         }
-    
+
         tr:hover {
             background-color: #f5f5f5;
         }
-    
+
         button {
             cursor: pointer;
             padding: 8px;
             margin: 4px;
         }
-    
+
         #searchBox {
             margin-bottom: 10px;
             margin-left: 10px;
             padding: 8px;
         }
+
+        #pagination {
+            margin-top: 10px;
+        }
+
+        #pagination a {
+            padding: 5px;
+            text-decoration: none;
+            border: 1px solid #ddd;
+            margin-right: 5px;
+        }
     </style>
 </head>
-
 
 <body>
     <h1>Stock List</h1>
@@ -71,6 +81,9 @@
                 <th>Index</th>
                 <th>Trade Code</th>
                 <th>Date</th>
+                <th>High</th>
+                <th>Low</th>
+                <th>Open</th>
                 <th>Close</th>
                 <th>Volume</th>
                 <th>Action</th>
@@ -78,28 +91,31 @@
         </thead>
         <tbody>
             {% for stock in stocks %}
-            <tr id="row_{{ forloop.counter }}">
+            <tr id="row_{{ forloop.counter }}" class="{% cycle 'odd' 'even' %}">
                 <td>{{ forloop.counter0|add:1 }}</td>
                 <td id="trade_code_{{ forloop.counter }}">{{ stock.trade_code }}</td>
                 <td id="date_{{ forloop.counter }}">{{ stock.date }}</td>
+                <td id="high_{{ forloop.counter }}">{{ stock.high }}</td>
+                <td id="low_{{ forloop.counter }}">{{ stock.low }}</td>
+                <td id="open_{{ forloop.counter }}">{{ stock.open }}</td>
                 <td id="close_{{ forloop.counter }}">{{ stock.close }}</td>
                 <td id="volume_{{ forloop.counter }}">{{ stock.volume }}</td>
                 <td>
-                    <button onclick="editRow({{ forloop.counter }})">Edit</button>
-                    <button onclick="updateRow({{ forloop.counter }})" style="display:none;">Update</button>
-                    <button onclick="cancelEdit({{ forloop.counter }})" style="display:none;">Cancel</button>
+                    <button onclick="editRow({{ forloop.counter }})">&#9998;</button>
+                    <button onclick="updateRow({{ forloop.counter }})" style="display:none;">&#10003;</button>
+                    <button onclick="cancelEdit({{ forloop.counter }})" style="display:none;">&#10007;</button>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 
+ 
+
     <script>
         function searchByIndex(index) {
-            // Convert index to lower case for case-insensitive search
             index = index.toLowerCase();
 
-            // Loop through each row and show/hide based on the index
             $('#stockTable tbody tr').each(function () {
                 var rowIndex = $(this).find('td:first').text().toLowerCase();
 
@@ -109,6 +125,50 @@
                     $(this).hide();
                 }
             });
+        }
+
+        function editRow(stockId) {
+            // Hide all edit buttons
+            $('[id^=row_] button:eq(0)').show();
+            $('[id^=row_] button:eq(1)').hide();
+            $('[id^=row_] button:eq(2)').hide();
+
+            // Show only the relevant row's update and cancel buttons
+            $('#row_' + stockId + ' button:eq(0)').hide();
+            $('#row_' + stockId + ' button:eq(1)').show();
+            $('#row_' + stockId + ' button:eq(2)').show();
+
+            // Show only the relevant row's input fields
+            $('#row_' + stockId + ' td:not(:first-child)').each(function () {
+                var currentText = $(this).text();
+                var inputField = '<input type="text" value="' + currentText + '" />';
+                $(this).html(inputField);
+            });
+        }
+
+        function updateRow(stockId) {
+            var updatedData = {
+                'trade_code': $('#trade_code_' + stockId + ' input').val(),
+                'date': $('#date_' + stockId + ' input').val(),
+                'high': $('#high_' + stockId + ' input').val(),
+                'low': $('#low_' + stockId + ' input').val(),
+                'open': $('#open_' + stockId + ' input').val(),
+                'close': $('#close_' + stockId + ' input').val(),
+                'volume': $('#volume_' + stockId + ' input').val(),
+            };
+
+            
+        }
+
+        function cancelEdit(stockId) {
+            // Restore original data and hide input fields
+            $('#row_' + stockId + ' td:not(:first-child)').each(function () {
+                $(this).html($(this).children('input').val());
+            });
+
+            // Hide the input fields and show the buttons again
+            $('#row_' + stockId + ' td input').hide();
+            $('[id^=row_] button:eq(0)').show();
         }
     </script>
 </body>
