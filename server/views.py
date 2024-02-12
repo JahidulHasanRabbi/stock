@@ -29,6 +29,7 @@ def populate():
         stock.save()
         i= i+1
         print("Stocks Saved", i)
+    print("Data Populated")
 
 class StockPopulate(View):
     def get(self, request):
