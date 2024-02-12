@@ -26,7 +26,8 @@ For local Deployment
 clone the https://github.com/JahidulHasanRabbi/stock.git
 
 open powersell in the directory
-run pip install < requierments.txt
+
+run: pip install < requierments.txt
 
 python manage.py makemigrations
 
