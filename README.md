@@ -21,3 +21,12 @@ This tigger the command to populate the database
 https://jannatwifi-5527ee63c27d.herokuapp.com/graph
 
 Using plotply Library visulatizion is done 
+
+For local Deployment
+clone the https://github.com/JahidulHasanRabbi/stock.git
+
+open powersell in the directory
+run pip install < requierments.txt
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
