@@ -1,1 +1,1 @@
-web gunicorn server.wsgi:application --log-file -
+web gunicorn tast_ai_intern.wsgi:application --log-file -
