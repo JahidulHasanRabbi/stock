@@ -27,6 +27,9 @@ clone the https://github.com/JahidulHasanRabbi/stock.git
 
 open powersell in the directory
 run pip install < requierments.txt
+
 python manage.py makemigrations
+
 python manage.py migrate
+
 python manage.py runserver
