@@ -4,6 +4,8 @@ from django.views import View
 from .models import StockModel
 from plotly.offline import plot
 import plotly.graph_objs as go
+import threading
+
 
 def populate():
     df = pd.read_csv('./stock_market_data.csv')
@@ -30,8 +32,9 @@ def populate():
 
 class StockPopulate(View):
     def get(self, request):
-        populate()
-    return "Done"
+        thread = threading.Thread(target=populate)
+        thread.start()
+        return render(request, 'index.html', {'message': 'Data Populating in the background'})
 
 
 
