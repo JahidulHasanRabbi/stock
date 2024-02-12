@@ -16,11 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from server.views import StockJSONView, StockCSVView, GraphView
+from server.views import StockJSONView, StockCSVView, GraphView, StockPopulate
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', StockJSONView.as_view()),
     path('sql/', StockCSVView.as_view()),
-    path('graph/', GraphView.as_view())
+    path('graph/', GraphView.as_view()),
+    path('p/', StockPopulate.as_view()),
 ]

@@ -27,6 +27,11 @@ def populate():
         stock.save()
         print("Stocks Saved")
 
+class StockPopulate(View):
+    def get(self, request):
+        populate()
+        return "Sucessfully Populated"
+
 
 
 class StockJSONView(View):
