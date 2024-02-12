@@ -13,7 +13,7 @@ def populate():
     df['open'] = df['open'].str.replace(',', '').astype(float)
     df['close'] = df['close'].str.replace(',', '').astype(float)
     
-
+    i = 0
     for index, row in df.iterrows():
         stock = StockModel(
             date=row['date'],
@@ -25,12 +25,13 @@ def populate():
             volume=row['volume']
             )
         stock.save()
-        print("Stocks Saved")
+        i= i+1
+        print("Stocks Saved", i)
 
 class StockPopulate(View):
     def get(self, request):
         populate()
-        return "Sucessfully Populated"
+    return "Done"
 
 
 
